@@ -53,9 +53,9 @@ void recursiveFileEnumerator(const wchar_t* path, const std::function<void(const
 }
 
 
-void loadPluginDlls() {
+void loadPluginDlls(const wchar_t* baseDir) {
     unloadPluginDlls();
-    Path pluginsPath = Path::make(L"CSharpLoader\\Plugins");
+    Path pluginsPath = Path::make(L"%s\\%s", baseDir, L"CSharpLoader\\Plugins");
     wprintf(L"loadPluginDlls : pluginsPath=[%s]\n", pluginsPath.data());
 
     std::vector<Path> pluginFilenames;

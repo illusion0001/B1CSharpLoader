@@ -58,15 +58,19 @@ struct MonoError {
 };
 typedef int (*ves_icall_System_AppDomain_ExecuteAssembly_t)(_MonoAppDomain** ad, _MonoReflectionAssembly** refass, void** args, MonoError* error);
 
-DWORD WINAPI MainThread(LPVOID dwModule)
+
+static DWORD WINAPI MainThread(LPVOID dwModule)
 {
-    if (dllType == DllType::Version)
+    const wchar_t* configFile = L"./CSharpLoader/b1cs.ini";
+    const wchar_t* baseDir = L".";
+    DWORD fileAttr = GetFileAttributes(configFile);
+    if (fileAttr == INVALID_FILE_ATTRIBUTES)
     {
-        Sleep(3000);
+        baseDir = L"./b1/Binaries/Win64";
+        configFile = L"./b1/Binaries/Win64/CSharpLoader/b1cs.ini";
     }
-    const char* configFile = "./CSharpLoader/b1cs.ini";
-    UINT enableConsole = GetPrivateProfileIntA("Settings", "Console", 0, configFile);
-    BOOL enableJit = GetPrivateProfileIntA("Settings", "EnableJit", 1, configFile);
+    UINT enableConsole = GetPrivateProfileInt(L"Settings", L"Console", 0, configFile);
+    BOOL enableJit = GetPrivateProfileInt(L"Settings", L"EnableJit", 1, configFile);
     if (enableConsole == 1) {
         AllocConsole();
         FILE* fDummy;
@@ -74,7 +78,7 @@ DWORD WINAPI MainThread(LPVOID dwModule)
         freopen_s(&fDummy, "CONOUT$", "w", stdout);
         freopen_s(&fDummy, "CONOUT$", "w", stderr);
     }
-    loadPluginDlls();
+    loadPluginDlls(baseDir);
     std::cout << "CSharpLoader enableJit: " << enableJit << std::endl;
     std::cout << "CSharpLoader wait for init." << std::endl;
     // enable jit

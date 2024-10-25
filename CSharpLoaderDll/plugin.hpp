@@ -1,4 +1,4 @@
 ﻿#pragma once
 
-void loadPluginDlls();
+void loadPluginDlls(const wchar_t *baseDir);
 void unloadPluginDlls();
