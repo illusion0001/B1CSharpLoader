@@ -30,23 +30,18 @@ namespace CSharpManager
                 ImGuiConfigFlags.NavEnableGamepad |
                 ImGuiConfigFlags.DockingEnable;
             io.Fonts.Flags |= ImFontAtlasFlags.NoBakedLines;
-            return base.PostInitialized();
-        }
 
-        protected override void AddFonts()
-        {
-            // base.AddFonts();
-            ImGuiIOPtr io = ImGui.GetIO();
             const string fontPath = "c:\\Windows\\Fonts\\msyh.ttc";
             if (File.Exists(fontPath))
             {
-                io.Fonts.AddFontFromFileTTF(fontPath, 18.0f * DpiScale, null, io.Fonts.GetGlyphRangesChineseFull());
+                ReplaceFont(fontPath, (int)(18.0f * DpiScale), FontGlyphRangeType.ChineseFull);
             }
+            return base.PostInitialized();
         }
 
         protected override void Render()
         {
-            if (NativeMethods.IsKeyPressedAndNotTimeout((int)Key.INSERT))
+            if (ClickableTransparentOverlay.Win32.Utils.IsKeyPressedAndNotTimeout(ClickableTransparentOverlay.Win32.VK.INSERT))
             {
                 ToggleVisible();
             }
@@ -58,7 +53,7 @@ namespace CSharpManager
             {
                 if (isDrawingUI)
                 {
-                    ImGui.Begin("CSharpLoader", ref isDrawingUI);
+                    ImGui.Begin("CSharpLoader by chenstack", ref isDrawingUI);
                     ImGui.Text("Press Insert to toggle window");
                     ImGui.Checkbox("Show Mouse", ref showMouse);
                     ImGui.SameLine();

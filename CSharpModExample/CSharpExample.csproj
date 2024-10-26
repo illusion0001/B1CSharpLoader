@@ -24,10 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClickableTransparentOverlay\ClickableTransparentOverlay\ClickableTransparentOverlay.csproj">
-      <!-- <Private>False</Private> -->
-      <!-- <ExcludeAssets>runtime</ExcludeAssets> -->
-    </ProjectReference>
+    <PackageReference Include="ImGui.NET" Version="1.91.0.1" />
   </ItemGroup>
 
   <ItemGroup>

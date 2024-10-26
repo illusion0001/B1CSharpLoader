@@ -49,7 +49,7 @@ namespace CSharpManager
             foreach (var item in items)
             {
                 if (item.Modifiers == modifiers && KeyUtils.IsKeyDown(item.Key) ||
-                    CurrentGamePadButton != GamePadButton.None && item.GamePadButton != GamePadButton.None && CurrentGamePadButton.HasFlag(item.GamePadButton))
+                    CurrentGamePadButton != GamePadButton.None && item.GamePadButton != GamePadButton.None && CurrentGamePadButton == item.GamePadButton)
                 {
                     if (item.IsPressed && (item.RepeatMs == 0 || item.LastTriggerMs > 0 && now - item.LastTriggerMs < item.RepeatMs))
                     {
