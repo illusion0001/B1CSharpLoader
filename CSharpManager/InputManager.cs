@@ -17,21 +17,22 @@ namespace CSharpManager
         // public static GamePadButtonEventHandler? GamePadButtonDown { get; set; }
 
         public IntPtr HWnd { get; private set; }
+        public uint ProcessId { get; }
 
         private InputManager()
         {
+            ProcessId = User32.GetCurrentProcessId();
         }
 
         public static InputManager Instance { get; } = new();
 
         private void FindMainWindow()
         {
-            uint currentProcessId = User32.GetCurrentProcessId();
             StringBuilder stringBuilder = new(64);
             User32.EnumWindows(new User32.EnumWindowsProc((hWnd, lParam) =>
             {
                 User32.GetWindowThreadProcessId(hWnd, out uint processId);
-                if (processId == User32.GetCurrentProcessId() &&
+                if (processId == ProcessId &&
                     User32.GetClassName(hWnd, stringBuilder, stringBuilder.Capacity) > 0 &&
                     stringBuilder.ToString() == "UnrealWindow")
                 {
@@ -109,7 +110,9 @@ namespace CSharpManager
             }
             var hwnd = User32.GetForegroundWindow();
             if (hwnd == IntPtr.Zero) return false;
-            return hwnd == HWnd;
+            if (hwnd == HWnd) return true;
+            User32.GetWindowThreadProcessId(hwnd, out uint processId);
+            return processId == ProcessId;
         }
 
         public HotKeyItem RegisterBuiltinKeyBind(Key key, Action action)
